@@ -24,7 +24,7 @@ public class TestFragment extends Fragment {
 
     // get some fake data
     //private static final String TEST_URL                 = "http://jsonplaceholder.typicode.com/comments";
-    private static final String TEST_URL                   = "http://denverpost.com/sports";
+    private static final String TEST_URL                   = "https://jsonplaceholder.typicode.com/posts?userId=11111";
     private static final String ACTION_FOR_INTENT_CALLBACK = "THIS_IS_A_UNIQUE_KEY_WE_USE_TO_COMMUNICATE";
 
     ProgressDialog progress;
@@ -65,18 +65,21 @@ public class TestFragment extends Fragment {
     public void onResume() {
         super.onResume();
         getActivity().registerReceiver(receiver, new IntentFilter(ACTION_FOR_INTENT_CALLBACK));
+        getActivity().registerReceiver(receivernew, new IntentFilter(ACTION_FOR_INTENT_CALLBACK));
     }
 
     @Override
     public void onPause() {
         super.onPause();
         getActivity().unregisterReceiver(receiver);
+
     }
 
     /**
      * Our Broadcast Receiver. We get notified that the data is ready, and then we
      * put the content we receive (a string) into the TextView.
      */
+
     private BroadcastReceiver receiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -85,8 +88,26 @@ public class TestFragment extends Fragment {
                 progress.dismiss();
             }
             String response = intent.getStringExtra(RestTask.HTTP_RESPONSE);
-            ourTextView.setText(response);
+            CharSequence text = ourTextView.getText();
+            ourTextView.setText(text + response + " Soy el viejo");
             Log.i(TAG, "RESPONSE = " + response);
+            //
+            // my old json code was here. this is where you would parse it.
+            //
+        }
+    };
+
+    private BroadcastReceiver receivernew = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            // clear the progress indicator
+            if (progress != null) {
+                progress.dismiss();
+            }
+            String response = intent.getStringExtra(RestTask.HTTP_RESPONSE);
+            CharSequence text = ourTextView.getText();
+            ourTextView.setText(text + response + "Soy el nuevo receiver");
+            Log.i(TAG, "RESPONSE2 = " + response);
             //
             // my old json code was here. this is where you would parse it.
             //

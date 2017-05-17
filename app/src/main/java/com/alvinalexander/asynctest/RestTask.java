@@ -55,6 +55,8 @@ public class RestTask extends AsyncTask<HttpUriRequest, Void, String>
         Log.i(TAG, "RESULT = " + result);
         Intent intent = new Intent(mAction);
         intent.putExtra(HTTP_RESPONSE, result);
+        Double number = 2.4;
+        intent.putExtra("NUMBER1", number);
 
         // broadcast the completion
         mContext.sendBroadcast(intent);
